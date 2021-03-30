@@ -5,6 +5,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>myimserver</module>
+        <module>myimclient</module>
+        <module>myimrcommon</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
