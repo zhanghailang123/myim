@@ -1,7 +1,8 @@
-package server;
+package server.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.net.InetSocketAddress;
 
 /**
@@ -40,7 +42,8 @@ public class NettyServer {
     /**
      * 启动Netty SerVer
      */
-    public void start (){
+    @PostConstruct
+    public void start () throws InterruptedException {
         ServerBootstrap bootstrap = new ServerBootstrap();
         bootstrap.group(workerGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
@@ -52,5 +55,24 @@ public class NettyServer {
                 .childOption(ChannelOption.SO_KEEPALIVE,true)
                 //允许较小的数据包的发送，降低延迟
                 .childOption(ChannelOption.TCP_NODELAY,true);
+
+        //绑定端口，并同步等待成功，即启动服务端
+        ChannelFuture future = bootstrap.bind().sync();
+        if (future.isSuccess()){
+            channel = future.channel();
+            log.info("Netty服务启动在端口：{}",port);
+        }
+
+    }
+
+
+    public void shutdown(){
+        //关闭Netty Server
+        if (channel != null){
+            channel.close();
+        }
+        //关闭两个EventLoppGroup对象
+        bossGroup.shutdownGracefully();
+        workerGroup.shutdownGracefully();
     }
 }
