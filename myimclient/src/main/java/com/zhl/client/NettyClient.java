@@ -1,14 +1,17 @@
 package com.zhl.client;
 
+import com.zhl.client.handler.NettyClientHandlerInitializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @description: Netty Client
@@ -23,7 +26,12 @@ public class NettyClient {
     private String serverHost;
     @Value("${netty.server.port}")
     private Integer serverPort;
-
+    @Autowired
+    private NettyClientHandlerInitializer nettyClientHandlerInitializer;
+    /**
+     * 重连频率，单位：秒
+     */
+    private static final Integer RECONNECT_SECONDS = 20;
 
     /**
      * 线程组，用于客户端对服务端的连接、数据读写
@@ -46,7 +54,8 @@ public class NettyClient {
                 .channel(NioSocketChannel.class)
                 .remoteAddress(serverHost,serverPort)
                 .option(ChannelOption.SO_KEEPALIVE,true)
-                .option(ChannelOption.TCP_NODELAY,true);
+                .option(ChannelOption.TCP_NODELAY,true)
+                .handler(nettyClientHandlerInitializer);
 //                .handler()
         //连接服务器，并异步等待成功，即启动客户端
         bootstrap.connect().addListener(new ChannelFutureListener() {
@@ -66,7 +75,14 @@ public class NettyClient {
     }
 
     public void reconnect(){
-
+        eventLoopGroup.schedule(new Runnable() {
+            @Override
+            public void run() {
+                log.info("[reconnect][开始重连]");
+                start();
+            }
+        }, RECONNECT_SECONDS, TimeUnit.SECONDS);
+        log.info("[reconnect][{} 秒后将发起重连]", RECONNECT_SECONDS);
     }
 
     /**

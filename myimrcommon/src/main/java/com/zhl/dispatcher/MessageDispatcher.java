@@ -6,6 +6,7 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,6 +17,7 @@ import java.util.concurrent.Executors;
  * @date: 2021/4/12 0012 22:42
  */
 @ChannelHandler.Sharable
+@Component
 public class MessageDispatcher extends SimpleChannelInboundHandler<Invocation> {
     @Autowired
     private MessageHandlerContainer messageHandlerContainer;

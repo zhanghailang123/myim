@@ -8,8 +8,10 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import server.server.handler.NettyServerHandlerInitializer;
 
 import javax.annotation.PostConstruct;
 import java.net.InetSocketAddress;
@@ -24,6 +26,9 @@ import java.net.InetSocketAddress;
 public class NettyServer {
     @Value("${netty.port}")
     private Integer port;
+
+    @Autowired
+    private NettyServerHandlerInitializer nettyServerHandlerInitializer;
 
     /**
      * Boss线程组，用于服务端接收客户端连接
@@ -54,7 +59,8 @@ public class NettyServer {
                 //TCP KeepAlive机制，实现TCP层级的心跳保活功能
                 .childOption(ChannelOption.SO_KEEPALIVE,true)
                 //允许较小的数据包的发送，降低延迟
-                .childOption(ChannelOption.TCP_NODELAY,true);
+                .childOption(ChannelOption.TCP_NODELAY,true)
+                .childHandler(nettyServerHandlerInitializer);
 
         //绑定端口，并同步等待成功，即启动服务端
         ChannelFuture future = bootstrap.bind().sync();

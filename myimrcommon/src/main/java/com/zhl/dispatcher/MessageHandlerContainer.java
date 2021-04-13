@@ -5,6 +5,7 @@ import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -18,6 +19,7 @@ import java.util.Objects;
  * @date: 2021/4/11 0011 00:09
  */
 @Slf4j
+@Component
 public class MessageHandlerContainer implements InitializingBean {
     @Autowired
     private ApplicationContext applicationContext;
