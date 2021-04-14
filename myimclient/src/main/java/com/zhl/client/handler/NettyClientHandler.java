@@ -1,6 +1,9 @@
 package com.zhl.client.handler;
 
 import com.zhl.client.NettyClient;
+import com.zhl.codec.Invocation;
+import com.zhl.message.heartbeat.HeartBeatRequest;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -38,8 +41,10 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
 //        super.userEventTriggered(ctx, evt);
         if (evt instanceof IdleStateEvent){
+            HeartBeatRequest heartBeatRequest = new HeartBeatRequest();
+            ctx.writeAndFlush(new Invocation(HeartBeatRequest.TYPE,heartBeatRequest))
+                    .addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
             log.info("发起一次心跳");
-
         }
     }
 }

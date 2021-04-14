@@ -1,5 +1,7 @@
 package com.zhl.codec;
 
+import com.alibaba.fastjson.JSON;
+import com.zhl.dispatcher.Message;
 import lombok.Data;
 
 /**
@@ -19,6 +21,10 @@ public class Invocation {
         this.message = message;
     }
 
+    public Invocation(String type, Message message) {
+        this.type = type;
+        this.message = JSON.toJSONString(message);
+    }
     /**
      * 消息，JSON格式
      */
