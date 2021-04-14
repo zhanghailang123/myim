@@ -1,6 +1,7 @@
 package com.zhl.client;
 
 import com.zhl.client.handler.NettyClientHandlerInitializer;
+import com.zhl.codec.Invocation;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -93,5 +94,22 @@ public class NettyClient {
             channel.close();
         }
         eventLoopGroup.shutdownGracefully();
+    }
+    /**
+     * 发送消息
+     *
+     * @param invocation 消息体
+     */
+    public void send(Invocation invocation) {
+        if (channel == null) {
+            log.error("[send][连接不存在]");
+            return;
+        }
+        if (!channel.isActive()) {
+            log.error("[send][连接({})未激活]", channel.id());
+            return;
+        }
+        // 发送消息
+        channel.writeAndFlush(invocation);
     }
 }

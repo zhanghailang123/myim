@@ -13,6 +13,12 @@ public class Invocation {
      *  类型
      */
     private String type;
+
+    public Invocation(String type, String message) {
+        this.type = type;
+        this.message = message;
+    }
+
     /**
      * 消息，JSON格式
      */
