@@ -8,8 +8,7 @@ import com.zhl.dispatcher.Message;
  * @date: 2021/4/14 0014 23:12
  */
 public class HeartBeatResponse implements Message {
-
-    private static final String TYPE = "HEARTBEAT_RESPONSE";
+    public static final String TYPE = "HEARTBEAT_RESPONSE";
     @Override
     public String toString() {
         return "HeartbeatResponse";
