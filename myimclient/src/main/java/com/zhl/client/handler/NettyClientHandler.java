@@ -24,7 +24,7 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     @Autowired
     private NettyClient nettyClient;
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 //
         //发起重连
         nettyClient.reconnect();
@@ -33,8 +33,9 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        log.error("连接{} 发生异常",ctx.channel().id());
-        super.exceptionCaught(ctx, cause);
+        log.error("连接{} 发生异常",ctx.channel().id(),cause);
+//        super.exceptionCaught(ctx, cause);
+        ctx.channel().close();
     }
 
     @Override
