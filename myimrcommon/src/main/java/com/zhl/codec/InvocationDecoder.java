@@ -1,6 +1,7 @@
 package com.zhl.codec;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.parser.Feature;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -38,7 +39,7 @@ public class InvocationDecoder extends ByteToMessageDecoder {
         byte[] content = new byte[length];
         in.readBytes(content);
         //解析成 invocation
-        Invocation invocation = JSON.parseObject(content,Invocation.class);
+        Invocation invocation = JSON.parseObject(content,Invocation.class, Feature.IgnoreNotMatch);
         out.add(invocation);
         log.info("连接（{}）解析到一条消息（{}）",ctx.channel().id(),invocation.toString());
     }

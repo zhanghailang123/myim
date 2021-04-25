@@ -32,8 +32,8 @@ public class NettyClientHandlerInitializer extends ChannelInitializer<Channel> {
         channel.pipeline()
                 .addLast(new IdleStateHandler(READ_TIMEOUT_SECONDS, 0, 0))
                 .addLast(new ReadTimeoutHandler(3 * READ_TIMEOUT_SECONDS))
-                .addLast(new InvocationDecoder())
                 .addLast(new InvocationEncoder())
+                .addLast(new InvocationDecoder())
                 .addLast(messageDispatcher)
                 .addLast(nettyClientHandler);
     }

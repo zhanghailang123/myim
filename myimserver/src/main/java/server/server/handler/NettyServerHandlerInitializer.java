@@ -19,7 +19,6 @@ import java.util.concurrent.TimeUnit;
  * @date: 2021/4/1 0001 22:44
  */
 @Component
-@Import(MessageDispatcher.class)
 public class NettyServerHandlerInitializer extends ChannelInitializer<Channel> {
 
     private static final Integer READ_TIMEOUT_SECONDS = 3 * 60;
@@ -32,16 +31,19 @@ public class NettyServerHandlerInitializer extends ChannelInitializer<Channel> {
         //获取Channel对应的Pipeline
         ChannelPipeline pipeline = channel.pipeline();
         pipeline
-                //服务端处理器
-                .addLast(serverHandler)
-                //消息分发器
-                .addLast(messageDispatcher)
+
+
                 //空闲检测
                 .addLast(new ReadTimeoutHandler(READ_TIMEOUT_SECONDS, TimeUnit.SECONDS))
-                //编码器
+//                //编码器
                 .addLast(new InvocationEncoder())
                 //解码器
                 .addLast(new InvocationDecoder())
+
+                //消息分发器
+                .addLast(messageDispatcher)
+                //服务端处理器
+                .addLast(serverHandler)
         ;
     }
 }

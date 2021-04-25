@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
  * @date: 2021/4/12 0012 22:42
  */
 @ChannelHandler.Sharable
+@Component
 public class MessageDispatcher extends SimpleChannelInboundHandler<Invocation> {
     @Autowired
     private MessageHandlerContainer messageHandlerContainer;

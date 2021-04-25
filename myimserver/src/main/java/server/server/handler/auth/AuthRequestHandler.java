@@ -6,6 +6,7 @@ import com.zhl.message.auth.AuthRequest;
 import com.zhl.message.auth.AuthResponse;
 import io.netty.channel.Channel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import server.server.NettyChannelManager;
 
@@ -14,6 +15,7 @@ import server.server.NettyChannelManager;
  * @author: zhanghailang
  * @date: 2021-4-19 22:55
  */
+@Component
 public class AuthRequestHandler implements MessageHandler<AuthRequest> {
 
     @Autowired

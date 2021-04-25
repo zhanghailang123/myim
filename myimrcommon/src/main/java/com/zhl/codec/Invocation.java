@@ -9,12 +9,21 @@ import lombok.Data;
  * @author: zhanghailang
  * @date: 2021/4/8 0008 22:39
  */
-@Data
+//@Data
 public class Invocation {
+
     /**
-     *  类型
+     * 类型
      */
     private String type;
+    /**
+     * 消息，JSON 格式
+     */
+    private String message;
+
+    // 空构造方法
+    public Invocation() {
+    }
 
     public Invocation(String type, String message) {
         this.type = type;
@@ -25,10 +34,24 @@ public class Invocation {
         this.type = type;
         this.message = JSON.toJSONString(message);
     }
-    /**
-     * 消息，JSON格式
-     */
-    private String message;
+
+    public String getType() {
+        return type;
+    }
+
+    public Invocation setType(String type) {
+        this.type = type;
+        return this;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public Invocation setMessage(String message) {
+        this.message = message;
+        return this;
+    }
 
     @Override
     public String toString() {
@@ -37,4 +60,5 @@ public class Invocation {
                 ", message='" + message + '\'' +
                 '}';
     }
+
 }
